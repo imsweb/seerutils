@@ -1,5 +1,9 @@
 ## SEER*Utils Version History
 
+**Changes in version 5.3**
+
+- Minor code cleanup and reformatting; no change in to the behavior.
+
 **Changes in version 5.2**
 
 - Fixed a bug in version comparison method; it was not handling double digits correctly.
