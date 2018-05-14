@@ -321,8 +321,20 @@ public final class SeerUtils {
      * @param file target file
      */
     public static void writeFile(String input, File file) throws IOException {
+        writeFile(input, file, null);
+    }
+
+    /**
+     * Writes the given string to the given file.
+     * <p/>
+     * Created on Mar 2, 2012 by Fabian
+     * @param input input string
+     * @param file target file
+     * @param encoding encoding to use
+     */
+    public static void writeFile(String input, File file, String encoding) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            IOUtils.copy(new StringReader(input), fos);
+            IOUtils.copy(new StringReader(input), fos, encoding);
         }
     }
 

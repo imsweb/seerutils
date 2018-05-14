@@ -2,7 +2,8 @@
 
 **Changes in version 5.3**
 
-- Minor code cleanup and reformatting; no change in to the behavior.
+- Updated commons-lang3 to version 3.6
+- Updated commons-io to version 2.5
 
 **Changes in version 5.2**
 
