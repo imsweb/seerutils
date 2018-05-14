@@ -18,6 +18,4 @@
 
 - Removed all extra modules; only a few utility classes and methods are left.
 
-**Changes prior to version 5.0**
 
-This library was split into smaller libraries, only a few utility classes remained in this project.
