@@ -1,5 +1,10 @@
 ## SEER*Utils Version History
 
+**Changes in version 5.4**
+
+- Updated commons-lang3 to version 3.7
+- Updated commons-io to version 2.6
+
 **Changes in version 5.3**
 
 - Updated commons-lang3 to version 3.6
