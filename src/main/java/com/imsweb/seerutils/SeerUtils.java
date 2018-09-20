@@ -682,7 +682,7 @@ public final class SeerUtils {
         for (File file : files) {
             if (!file.exists())
                 throw new IOException("Source directory does not exist.");
-            internalZip(file, zipOutput, to.getParentFile().getAbsolutePath().length() - 1);
+            internalZip(file, zipOutput, file.getParentFile().getAbsolutePath().length() - 1);
         }
 
         zipOutput.flush();
