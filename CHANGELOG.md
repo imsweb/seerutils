@@ -1,5 +1,9 @@
 ## SEER*Utils Version History
 
+**Changes in version 5.5**
+
+- Fixed bug in SeerUtils.zipFiles
+
 **Changes in version 5.4**
 
 - Updated commons-lang3 to version 3.7
