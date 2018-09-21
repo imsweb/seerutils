@@ -187,10 +187,10 @@ public class SeerUtilsTest {
             }
         }
         Assert.assertEquals(2, fileNames.size());
-        Assert.assertEquals(testFile1.getName(), fileNames.get(0));
-        Assert.assertEquals(testFile2.getName(), fileNames.get(1));
-        Assert.assertEquals(file1Txt, fileTxt.get(0));
-        Assert.assertEquals(file2Txt, fileTxt.get(1));
+        Assert.assertTrue(fileNames.contains(testFile1.getName()));
+        Assert.assertTrue(fileNames.contains(testFile2.getName()));
+        Assert.assertTrue(fileTxt.contains(file1Txt));
+        Assert.assertTrue(fileTxt.contains(file2Txt));
 
         //Test zipping directories
         String testingDirPath = outputDirPath + "dirToZip/";
@@ -220,11 +220,11 @@ public class SeerUtilsTest {
             }
         }
         Assert.assertEquals(3, fileNames.size());
-        Assert.assertEquals(tempTestDir.getName() + "/", fileNames.get(0));
-        Assert.assertEquals(tempTestDir.getName() + "/" + testFile3.getName(), fileNames.get(1));
-        Assert.assertEquals(tempTestDir.getName() + "/" + testFile4.getName(), fileNames.get(2));
-        Assert.assertEquals(file3Txt, fileTxt.get(0));
-        Assert.assertEquals(file4Txt, fileTxt.get(1));
+        Assert.assertTrue(fileNames.contains(tempTestDir.getName() + "/"));
+        Assert.assertTrue(fileNames.contains(tempTestDir.getName() + "/" + testFile3.getName()));
+        Assert.assertTrue(fileNames.contains(tempTestDir.getName() + "/" + testFile4.getName()));
+        Assert.assertTrue(fileTxt.contains(file3Txt));
+        Assert.assertTrue(fileTxt.contains(file4Txt));
 
         //Remove testing directory
         SeerUtils.deleteDirectory(tempDir);
