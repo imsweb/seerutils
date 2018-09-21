@@ -674,24 +674,21 @@ public final class SeerUtils {
      */
     public static void zipFiles(List<File> files, File to) throws IOException {
         if (!to.getName().toLowerCase().endsWith(".zip"))
-            throw new IOException("Targer file must end with 'zip'.");
+            throw new IOException("Target file must end with 'zip'.");
 
-        FileOutputStream fos = new FileOutputStream(to);
-        ZipOutputStream zipOutput = new ZipOutputStream(fos);
-
-        for (File file : files) {
-            if (!file.exists())
-                throw new IOException("Source directory does not exist.");
-            internalZip(file, zipOutput, file.getParentFile().getAbsolutePath().length() - 1);
+        try (FileOutputStream fos = new FileOutputStream(to); ZipOutputStream zipOutput = new ZipOutputStream(fos)) {
+            for (File file : files) {
+                if (!file.exists())
+                    throw new IOException("Source directory does not exist.");
+                internalZip(file, zipOutput);
+            }
         }
-
-        zipOutput.flush();
-        zipOutput.close();
-        fos.close();
     }
 
-    private static void internalZip(File file, ZipOutputStream zipOutput, int topDirLength) throws IOException {
-        String relative = file.getAbsolutePath().substring(topDirLength).replace('\\', '/').substring(1);
+    private static void internalZip(File file, ZipOutputStream zipOutput) throws IOException {
+        //String relative = file.getAbsolutePath();//.replaceAll("\\\\", "/");
+        String relative = file.getName();//.replaceAll("\\\\", "/");
+       
         if (file.isDirectory() && !relative.endsWith("/"))
             relative += "/";
         zipOutput.putNextEntry(new ZipEntry(relative));
@@ -701,7 +698,7 @@ public final class SeerUtils {
             File[] files = file.listFiles();
             if (files != null)
                 for (File f : files)
-                    internalZip(f, zipOutput, topDirLength);
+                    internalZip(f, zipOutput);
         }
     }
 
