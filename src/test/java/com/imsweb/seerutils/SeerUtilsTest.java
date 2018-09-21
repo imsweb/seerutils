@@ -3,6 +3,19 @@
  */
 package com.imsweb.seerutils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -143,5 +156,77 @@ public class SeerUtilsTest {
     @Test(expected = RuntimeException.class)
     public void testCompareSeerVersionsBadInput2() {
         SeerUtils.compareSeerVersions("1.0", "???");
+    }
+
+    @Test
+    public void testZipFiles() throws IOException {
+        String outputDirPath = SeerUtils.getWorkingDirectory() + "tempDir/";
+        File tempDir = new File(outputDirPath);
+        tempDir.mkdir();
+
+        //Test zipping files
+        File testFile1 = new File(outputDirPath + "testFile1.txt");
+        File testFile2 = new File(outputDirPath + "testFile2.txt");
+        String file1Txt = "This is test file 1.";
+        String file2Txt = "This is test file 2.";
+        try (FileWriter writer1 = new FileWriter(testFile1); FileWriter writer2 = new FileWriter(testFile2)) {
+            writer1.write(file1Txt);
+            writer2.write(file2Txt);
+        }
+
+        File zipFile = new File(outputDirPath + "testZipFiles.zip");
+        SeerUtils.zipFiles(Arrays.asList(testFile1, testFile2), zipFile);
+
+        List<String> fileTxt = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();
+        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFile)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is))) {
+            ZipEntry entry;
+            while ((entry = is.getNextEntry()) != null) {
+                fileNames.add(entry.getName());
+                fileTxt.add(reader.readLine());
+            }
+        }
+        Assert.assertEquals(2, fileNames.size());
+        Assert.assertTrue(fileNames.contains(testFile1.getName()));
+        Assert.assertTrue(fileNames.contains(testFile2.getName()));
+        Assert.assertTrue(fileTxt.contains(file1Txt));
+        Assert.assertTrue(fileTxt.contains(file2Txt));
+
+        //Test zipping directories
+        String testingDirPath = outputDirPath + "dirToZip/";
+        File tempTestDir = new File(testingDirPath);
+        tempTestDir.mkdir();
+
+        File testFile3 = new File(testingDirPath + "testFile3.txt");
+        File testFile4 = new File(testingDirPath + "testFile4.txt");
+        String file3Txt = "This is test file 3.";
+        String file4Txt = "This is test file 4.";
+        try (FileWriter writer3 = new FileWriter(testFile3); FileWriter writer4 = new FileWriter(testFile4)) {
+            writer3.write(file3Txt);
+            writer4.write(file4Txt);
+        }
+
+        File zipFileDir = new File(outputDirPath + "testZipDir.zip");
+        SeerUtils.zipFiles(Collections.singletonList(tempTestDir), zipFileDir);
+
+        fileTxt = new ArrayList<>();
+        fileNames = new ArrayList<>();
+        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFileDir)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is))) {
+            ZipEntry entry;
+            while ((entry = is.getNextEntry()) != null) {
+                fileNames.add(entry.getName());
+                if (!entry.isDirectory())
+                    fileTxt.add(reader.readLine());
+            }
+        }
+        Assert.assertEquals(3, fileNames.size());
+        Assert.assertTrue(fileNames.contains(tempTestDir.getName() + "/"));
+        Assert.assertTrue(fileNames.contains(tempTestDir.getName() + "/" + testFile3.getName()));
+        Assert.assertTrue(fileNames.contains(tempTestDir.getName() + "/" + testFile4.getName()));
+        Assert.assertTrue(fileTxt.contains(file3Txt));
+        Assert.assertTrue(fileTxt.contains(file4Txt));
+
+        //Remove testing directory
+        SeerUtils.deleteDirectory(tempDir);
     }
 }

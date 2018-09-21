@@ -674,20 +674,15 @@ public final class SeerUtils {
      */
     public static void zipFiles(List<File> files, File to) throws IOException {
         if (!to.getName().toLowerCase().endsWith(".zip"))
-            throw new IOException("Targer file must end with 'zip'.");
+            throw new IOException("Target file must end with 'zip'.");
 
-        FileOutputStream fos = new FileOutputStream(to);
-        ZipOutputStream zipOutput = new ZipOutputStream(fos);
-
-        for (File file : files) {
-            if (!file.exists())
-                throw new IOException("Source directory does not exist.");
-            internalZip(file, zipOutput, file.getParentFile().getAbsolutePath().length() - 1);
+        try (FileOutputStream fos = new FileOutputStream(to); ZipOutputStream zipOutput = new ZipOutputStream(fos)) {
+            for (File file : files) {
+                if (!file.exists())
+                    throw new IOException("Source directory does not exist.");
+                internalZip(file, zipOutput, file.getParentFile().getAbsolutePath().length());
+            }
         }
-
-        zipOutput.flush();
-        zipOutput.close();
-        fos.close();
     }
 
     private static void internalZip(File file, ZipOutputStream zipOutput, int topDirLength) throws IOException {
@@ -742,5 +737,9 @@ public final class SeerUtils {
                 entry = zipInput.getNextEntry();
             }
         }
+    }
+
+    public static String getWorkingDirectory() {
+        return System.getProperty("user.dir").replace(".idea\\modules\\", "");
     }
 }
