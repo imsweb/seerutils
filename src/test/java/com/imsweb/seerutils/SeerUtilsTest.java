@@ -160,7 +160,7 @@ public class SeerUtilsTest {
 
     @Test
     public void testZipFiles() throws IOException {
-        String outputDirPath = SeerUtils.getWorkingDirectory() + "tempDir\\";
+        String outputDirPath = SeerUtils.getWorkingDirectory() + "tempDir/";
         File tempDir = new File(outputDirPath);
         tempDir.mkdir();
 
@@ -193,7 +193,7 @@ public class SeerUtilsTest {
         Assert.assertEquals(file2Txt, fileTxt.get(1));
 
         //Test zipping directories
-        String testingDirPath = outputDirPath + "dirToZip\\";
+        String testingDirPath = outputDirPath + "dirToZip/";
         File tempTestDir = new File(testingDirPath);
         tempTestDir.mkdir();
 
