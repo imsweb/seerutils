@@ -680,15 +680,13 @@ public final class SeerUtils {
             for (File file : files) {
                 if (!file.exists())
                     throw new IOException("Source directory does not exist.");
-                internalZip(file, zipOutput);
+                internalZip(file, zipOutput, file.getParentFile().getAbsolutePath().length());
             }
         }
     }
 
-    private static void internalZip(File file, ZipOutputStream zipOutput) throws IOException {
-        //String relative = file.getAbsolutePath();//.replaceAll("\\\\", "/");
-        String relative = file.getName();//.replaceAll("\\\\", "/");
-       
+    private static void internalZip(File file, ZipOutputStream zipOutput, int topDirLength) throws IOException {
+        String relative = file.getAbsolutePath().substring(topDirLength).replace('\\', '/').substring(1);
         if (file.isDirectory() && !relative.endsWith("/"))
             relative += "/";
         zipOutput.putNextEntry(new ZipEntry(relative));
@@ -698,7 +696,7 @@ public final class SeerUtils {
             File[] files = file.listFiles();
             if (files != null)
                 for (File f : files)
-                    internalZip(f, zipOutput);
+                    internalZip(f, zipOutput, topDirLength);
         }
     }
 
@@ -739,5 +737,9 @@ public final class SeerUtils {
                 entry = zipInput.getNextEntry();
             }
         }
+    }
+
+    public static String getWorkingDirectory() {
+        return System.getProperty("user.dir").replace(".idea\\modules\\", "");
     }
 }
