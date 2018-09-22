@@ -1,6 +1,5 @@
 # SEER*Utils
 
-[![Build Status](https://travis-ci.org/imsweb/seerutils.svg?branch=master)](https://travis-ci.org/imsweb/seerutils)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/seerutils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/seerutils)
 
 This project contains a few utility classes for SEER Java projects.
