@@ -3,7 +3,7 @@ import org.gradle.internal.jvm.Jvm
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'net.ltgt.errorprone' version '0.0.16'
+    id 'com.github.spotbugs' version '1.6.5'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.8.0'
 }
@@ -12,6 +12,7 @@ group = 'com.imsweb'
 version = file('VERSION').text.trim()
 description = 'Utility library for SEER Java projects.'
 sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 println "Starting build using ${Jvm.current()}"
 
@@ -24,8 +25,6 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
 
     testImplementation 'junit:junit:4.12'
-
-    errorprone 'com.google.errorprone:error_prone_core:2.3.1'
 }
 
 // enforce UTF-8, display the compilation warnings
@@ -58,6 +57,12 @@ jar {
 checkstyle {
     ignoreFailures = true
     configFile = file('config/checkstyle/checkstyle.xml')
+}
+
+// spotbugs plugin settings
+spotbugs {
+    ignoreFailures = true
+    excludeFilter = file('config/spotbugs/spotbugs-exclude.xml')
 }
 
 // needed to deploy to Maven Central
@@ -98,7 +103,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle!
 wrapper {
-    gradleVersion = '4.9'
+    gradleVersion = '4.10.2'
 }
 
 
