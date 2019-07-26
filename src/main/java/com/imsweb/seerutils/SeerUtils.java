@@ -14,6 +14,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,7 +116,7 @@ public final class SeerUtils {
      * @return true if the provided string contains only printable ASCII characters, false otherwise
      */
     public static boolean isPureAscii(String s) {
-        return s == null || isPureAscii(s.getBytes(), null);
+        return s == null || isPureAscii(s.getBytes(StandardCharsets.US_ASCII), null);
     }
 
     /**
@@ -201,13 +202,15 @@ public final class SeerUtils {
             throw new IOException("Output Stream is null");
 
         // delegate the work to the IOUtils class...
-        IOUtils.copyLarge(input, output);
-
-        output.flush();
-
-        input.close();
-        if (closeOutput)
-            output.close();
+        try {
+            IOUtils.copyLarge(input, output);
+            output.flush();
+        }
+        finally {
+            input.close();
+            if (closeOutput)
+                output.close();
+        }
     }
 
     /**
