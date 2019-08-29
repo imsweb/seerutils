@@ -1,5 +1,9 @@
 ## SEER*Utils Version History
 
+**Changes in version 5.6**
+
+- Fixed a bug in SeerUtils.copyDirectory method.
+
 **Changes in version 5.5**
 
 - Fixed bug in SeerUtils.zipFiles

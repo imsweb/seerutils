@@ -617,7 +617,7 @@ public final class SeerUtils {
             if (f.isFile())
                 copyInputStreamToOutputStream(new FileInputStream(f), new FileOutputStream(new File(to, f.getName())));
             else
-                copyDirectory(f, new File(to, from.getName()));
+                copyDirectory(f, new File(to, f.getName()));
         }
     }
 
@@ -740,9 +740,5 @@ public final class SeerUtils {
                 entry = zipInput.getNextEntry();
             }
         }
-    }
-
-    public static String getWorkingDirectory() {
-        return System.getProperty("user.dir").replace(".idea\\modules\\", "");
     }
 }

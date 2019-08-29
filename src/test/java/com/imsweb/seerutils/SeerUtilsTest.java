@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -72,8 +74,9 @@ public class SeerUtilsTest {
         Assert.assertEquals("2.4 GB", (SeerUtils.formatFileSize(2523456789L)));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
-    public void testIsPureAscii() throws Exception {
+    public void testIsPureAscii() {
 
         // string flavor
         Assert.assertTrue(SeerUtils.isPureAscii((String)null));
@@ -89,15 +92,15 @@ public class SeerUtilsTest {
 
         // byte array flavor, still using strings
         Assert.assertTrue(SeerUtils.isPureAscii(null, null));
-        Assert.assertTrue(SeerUtils.isPureAscii("".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("   ".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("abc".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("ABC".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("123".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("!@#`".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("A multi-line\nvalue...".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("A multi-line\r\nvalue...".getBytes("US-ASCII"), null));
-        Assert.assertTrue(SeerUtils.isPureAscii("A\ttab...".getBytes("US-ASCII"), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("   ".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("abc".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("ABC".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("123".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("!@#`".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("A multi-line\nvalue...".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("A multi-line\r\nvalue...".getBytes(StandardCharsets.US_ASCII), null));
+        Assert.assertTrue(SeerUtils.isPureAscii("A\ttab...".getBytes(StandardCharsets.US_ASCII), null));
 
         // byte array flavor using pure bytes
         Assert.assertTrue(SeerUtils.isPureAscii(new byte[] {}, null));
@@ -158,15 +161,15 @@ public class SeerUtilsTest {
         SeerUtils.compareSeerVersions("1.0", "???");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void testZipFiles() throws IOException {
-        String outputDirPath = SeerUtils.getWorkingDirectory() + "tempDir/";
-        File tempDir = new File(outputDirPath);
+        File tempDir = new File(getTestingDirectory(), "tmpDir");
         tempDir.mkdir();
 
         //Test zipping files
-        File testFile1 = new File(outputDirPath + "testFile1.txt");
-        File testFile2 = new File(outputDirPath + "testFile2.txt");
+        File testFile1 = new File(tempDir, "testFile1.txt");
+        File testFile2 = new File(tempDir, "testFile2.txt");
         String file1Txt = "This is test file 1.";
         String file2Txt = "This is test file 2.";
         try (FileWriter writer1 = new FileWriter(testFile1); FileWriter writer2 = new FileWriter(testFile2)) {
@@ -174,7 +177,7 @@ public class SeerUtilsTest {
             writer2.write(file2Txt);
         }
 
-        File zipFile = new File(outputDirPath + "testZipFiles.zip");
+        File zipFile = new File(tempDir, "testZipFiles.zip");
         SeerUtils.zipFiles(Arrays.asList(testFile1, testFile2), zipFile);
 
         List<String> fileTxt = new ArrayList<>();
@@ -193,12 +196,11 @@ public class SeerUtilsTest {
         Assert.assertTrue(fileTxt.contains(file2Txt));
 
         //Test zipping directories
-        String testingDirPath = outputDirPath + "dirToZip/";
-        File tempTestDir = new File(testingDirPath);
+        File tempTestDir = new File(tempDir, "dirToZip");
         tempTestDir.mkdir();
 
-        File testFile3 = new File(testingDirPath + "testFile3.txt");
-        File testFile4 = new File(testingDirPath + "testFile4.txt");
+        File testFile3 = new File(tempTestDir, "testFile3.txt");
+        File testFile4 = new File(tempTestDir, "testFile4.txt");
         String file3Txt = "This is test file 3.";
         String file4Txt = "This is test file 4.";
         try (FileWriter writer3 = new FileWriter(testFile3); FileWriter writer4 = new FileWriter(testFile4)) {
@@ -206,7 +208,7 @@ public class SeerUtilsTest {
             writer4.write(file4Txt);
         }
 
-        File zipFileDir = new File(outputDirPath + "testZipDir.zip");
+        File zipFileDir = new File(tempDir, "testZipDir.zip");
         SeerUtils.zipFiles(Collections.singletonList(tempTestDir), zipFileDir);
 
         fileTxt = new ArrayList<>();
@@ -228,5 +230,39 @@ public class SeerUtilsTest {
 
         //Remove testing directory
         SeerUtils.deleteDirectory(tempDir);
+    }
+
+    @Test
+    public void testCopyDirectory() throws IOException {
+        File dir = new File(getTestingDirectory(), "test-source");
+        if (dir.exists())
+            FileUtils.deleteDirectory(dir);
+        Assert.assertFalse(dir.exists());
+        Assert.assertTrue(dir.mkdir());
+        SeerUtils.writeFile("TEST", new File(dir, "test.txt"));
+        File subDir1 = new File(dir, "howtos");
+        Assert.assertTrue(subDir1.mkdir());
+        SeerUtils.writeFile("TEST2", new File(subDir1, "test2.txt"));
+        File subDir2 = new File(subDir1, "images");
+        Assert.assertTrue(subDir2.mkdir());
+        SeerUtils.writeFile("TEST3", new File(subDir2, "test3.txt"));
+
+        File newDir = new File(getTestingDirectory(), "test-target");
+        SeerUtils.copyDirectory(dir, newDir);
+        Assert.assertEquals("TEST", SeerUtils.readFile(new File(newDir, "test.txt")));
+        File newSubDir1 = new File(newDir, "howtos");
+        Assert.assertEquals("TEST2", SeerUtils.readFile(new File(newSubDir1, "test2.txt")));
+        File newSubDir2 = new File(newSubDir1, "images");
+        Assert.assertEquals("TEST3", SeerUtils.readFile(new File(newSubDir2, "test3.txt")));
+    }
+
+    private File getTestingDirectory() {
+        File workingDir = new File(System.getProperty("user.dir").replace(".idea\\modules\\", ""));
+        if (!workingDir.exists())
+            throw new RuntimeException("Unable to find " + workingDir.getPath());
+        File file = new File(workingDir, "build/test-data");
+        if (!file.exists() && !file.mkdir())
+            throw new RuntimeException("Unable to crate " + file.getPath());
+        return file;
     }
 }
