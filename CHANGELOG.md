@@ -1,5 +1,9 @@
 ## SEER*Utils Version History
 
+**Changes in version 5.7**
+
+- Updated commons-lang3 to version 3.9
+
 **Changes in version 5.6**
 
 - Fixed a bug in SeerUtils.copyDirectory method.

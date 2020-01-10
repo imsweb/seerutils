@@ -1,24 +1,23 @@
-import org.gradle.internal.jvm.Jvm
-
 plugins {
     id 'java-library'
     id 'com.bmuschko.nexus' version '2.3.1'
-    id 'io.codearte.nexus-staging' version '0.8.0'
+    id 'io.codearte.nexus-staging' version '0.21.2'
 }
 
 group = 'com.imsweb'
 version = file('VERSION').text.trim()
 description = 'Utility library for SEER Java projects.'
 sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-println "Starting build using ${Jvm.current()}"
+println "Starting build using JDK ${Runtime.version().feature()}"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'commons-io:commons-io:2.6'
 
     testImplementation 'junit:junit:4.12'
@@ -88,7 +87,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle!
 wrapper {
-    gradleVersion = '5.5.1'
+    gradleVersion = '6.0.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
