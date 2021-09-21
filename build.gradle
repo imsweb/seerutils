@@ -11,6 +11,8 @@ description = 'Utility library for SEER Java projects.'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+println "Starting build using JDK ${Runtime.version().feature()}"
+
 repositories {
     mavenCentral()
 }
