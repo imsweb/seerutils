@@ -5,10 +5,13 @@ package com.imsweb.seerutils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -165,14 +168,16 @@ public class SeerUtilsTest {
     @Test
     public void testZipFiles() throws IOException {
         File tempDir = new File(getTestingDirectory(), "tmpDir");
-        tempDir.mkdir();
+        if (!tempDir.mkdir())
+            throw new IOException("Unable to create dir");
 
         //Test zipping files
         File testFile1 = new File(tempDir, "testFile1.txt");
         File testFile2 = new File(tempDir, "testFile2.txt");
         String file1Txt = "This is test file 1.";
         String file2Txt = "This is test file 2.";
-        try (FileWriter writer1 = new FileWriter(testFile1); FileWriter writer2 = new FileWriter(testFile2)) {
+        try (Writer writer1 = new OutputStreamWriter(new FileOutputStream(testFile1), StandardCharsets.US_ASCII);
+             Writer writer2 = new OutputStreamWriter(new FileOutputStream(testFile2), StandardCharsets.US_ASCII)) {
             writer1.write(file1Txt);
             writer2.write(file2Txt);
         }
@@ -182,7 +187,7 @@ public class SeerUtilsTest {
 
         List<String> fileTxt = new ArrayList<>();
         List<String> fileNames = new ArrayList<>();
-        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFile)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is))) {
+        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFile)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
             ZipEntry entry;
             while ((entry = is.getNextEntry()) != null) {
                 fileNames.add(entry.getName());
