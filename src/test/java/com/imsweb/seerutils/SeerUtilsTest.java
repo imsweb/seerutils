@@ -6,7 +6,6 @@ package com.imsweb.seerutils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -164,7 +163,6 @@ public class SeerUtilsTest {
         SeerUtils.compareSeerVersions("1.0", "???");
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void testZipFiles() throws IOException {
         File tempDir = new File(getTestingDirectory(), "tmpDir");
@@ -202,13 +200,15 @@ public class SeerUtilsTest {
 
         //Test zipping directories
         File tempTestDir = new File(tempDir, "dirToZip");
-        tempTestDir.mkdir();
+        if (!tempTestDir.mkdir())
+            throw new IOException("Unable to create dir");
 
         File testFile3 = new File(tempTestDir, "testFile3.txt");
         File testFile4 = new File(tempTestDir, "testFile4.txt");
         String file3Txt = "This is test file 3.";
         String file4Txt = "This is test file 4.";
-        try (FileWriter writer3 = new FileWriter(testFile3); FileWriter writer4 = new FileWriter(testFile4)) {
+        try (Writer writer3 = new OutputStreamWriter(new FileOutputStream(testFile3), StandardCharsets.US_ASCII);
+             Writer writer4 = new OutputStreamWriter(new FileOutputStream(testFile4), StandardCharsets.US_ASCII)) {
             writer3.write(file3Txt);
             writer4.write(file4Txt);
         }
@@ -218,7 +218,7 @@ public class SeerUtilsTest {
 
         fileTxt = new ArrayList<>();
         fileNames = new ArrayList<>();
-        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFileDir)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is))) {
+        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFileDir)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
             ZipEntry entry;
             while ((entry = is.getNextEntry()) != null) {
                 fileNames.add(entry.getName());
