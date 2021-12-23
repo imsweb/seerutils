@@ -4,7 +4,4 @@
   <Class name="com.imsweb.seerutils.SeerUtils"/>
   <Bug code="OS,OBL"/>
 </Match>
-<Match>
-  <Class name="~.*\.*Test"/>
-</Match>
 </FindBugsFilter>

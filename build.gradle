@@ -58,6 +58,14 @@ jar {
         )
     }
 }
+
+// spotbugs plugin settings
+spotbugs {
+    ignoreFailures = false
+    excludeFilter = file('config/spotbugs/spotbugs-exclude.xml')
+}
+
+
 // needed to deploy to Maven Central
 publishing {
     publications {
