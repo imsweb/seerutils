@@ -40,21 +40,21 @@ public class SeerUtilsTest {
     @Test
     public void testTrimLeft() {
         Assert.assertNull(null, SeerUtils.trimLeft(null));
-        Assert.assertEquals(SeerUtils.trimLeft(""), "");
-        Assert.assertEquals(SeerUtils.trimLeft("  Hello"), "Hello");
-        Assert.assertEquals(SeerUtils.trimLeft("  Hello  "), "Hello  ");
-        Assert.assertEquals(SeerUtils.trimLeft("Hello  "), "Hello  ");
-        Assert.assertEquals(SeerUtils.trimLeft("  Hello Hello  "), "Hello Hello  ");
+        Assert.assertEquals("", SeerUtils.trimLeft(""));
+        Assert.assertEquals("Hello", SeerUtils.trimLeft("  Hello"));
+        Assert.assertEquals("Hello  ", SeerUtils.trimLeft("  Hello  "));
+        Assert.assertEquals("Hello  ", SeerUtils.trimLeft("Hello  "));
+        Assert.assertEquals("Hello Hello  ", SeerUtils.trimLeft("  Hello Hello  "));
     }
 
     @Test
     public void testTrimRight() {
         Assert.assertNull(null, SeerUtils.trimRight(null));
-        Assert.assertEquals(SeerUtils.trimRight(""), "");
-        Assert.assertEquals(SeerUtils.trimRight("  Hello"), "  Hello");
-        Assert.assertEquals(SeerUtils.trimRight("  Hello  "), "  Hello");
-        Assert.assertEquals(SeerUtils.trimRight("Hello  "), "Hello");
-        Assert.assertEquals(SeerUtils.trimRight("  Hello Hello  "), "  Hello Hello");
+        Assert.assertEquals("", SeerUtils.trimRight(""));
+        Assert.assertEquals("  Hello", SeerUtils.trimRight("  Hello"));
+        Assert.assertEquals("  Hello", SeerUtils.trimRight("  Hello  "));
+        Assert.assertEquals("Hello", SeerUtils.trimRight("Hello  "));
+        Assert.assertEquals("  Hello Hello", SeerUtils.trimRight("  Hello Hello  "));
     }
 
     @Test

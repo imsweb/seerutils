@@ -58,9 +58,10 @@ public final class SeerMath {
         // first pass: read in data, compute xbar and ybar        
         double[] x = new double[n];
         double[] y = new double[n];
-        double sumx = 0.0, sumy = 0.0;
+        double sumx = 0.0;
+        double sumy = 0.0;
         for (int i = 0; i < n; i++) {
-            x[i] = Integer.valueOf(i).doubleValue(); // we don't have the X variables so just use 0 to number-of-value...
+            x[i] = i; // we don't have the X variables so just use 0 to number-of-value...
             y[i] = input.get(i).doubleValue();
             sumx += x[i];
             sumy += y[i];
@@ -69,7 +70,9 @@ public final class SeerMath {
         double ybar = sumy / n;
 
         // second pass: compute summary statistics
-        double xxbar = 0.0, yybar = 0.0, xybar = 0.0;
+        double xxbar = 0.0;
+        double yybar = 0.0;
+        double xybar = 0.0;
         for (int i = 0; i < n; i++) {
             xxbar += (x[i] - xbar) * (x[i] - xbar);
             yybar += (y[i] - ybar) * (y[i] - ybar);

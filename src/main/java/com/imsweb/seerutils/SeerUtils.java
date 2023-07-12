@@ -67,14 +67,15 @@ public final class SeerUtils {
         String v2 = _VERSION_CLEANUP_PATTERN.matcher(version2.toLowerCase()).replaceAll("");
 
         if (!_VERSIONS_PATTERN.matcher(v1).matches())
-            throw new RuntimeException("Invalid version format: " + v1);
+            throw new IllegalArgumentException("Invalid version format: " + v1);
         if (!_VERSIONS_PATTERN.matcher(v2).matches())
-            throw new RuntimeException("Invalid version format: " + v2);
+            throw new IllegalArgumentException("Invalid version format: " + v2);
 
         String[] parts1 = StringUtils.split(v1, '.');
         String[] parts2 = StringUtils.split(v2, '.');
 
-        List<Integer> list1 = new ArrayList<>(), list2 = new ArrayList<>();
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
         for (int i = 0; i < Math.max(parts1.length, parts2.length); i++) {
             if (i < parts1.length)
                 list1.add(Integer.valueOf(parts1[i]));
