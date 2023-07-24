@@ -106,8 +106,6 @@ public class ZipArchiveThresholdInputStream extends FilterInputStream {
             rawSize = 0;
         }
 
-        final String entryName = _entry == null ? "not set" : _entry.getName();
-
         // check the file size first, in case we are working on uncompressed streams; only check is max entry size is greater than 0
         if (_maxEntrySize > 0 && payloadSize > _maxEntrySize)
             throw new ZipEntryTooLargeException(_MAX_ENTRY_SIZE_MSG);

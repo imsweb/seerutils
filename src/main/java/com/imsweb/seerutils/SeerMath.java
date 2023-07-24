@@ -23,7 +23,7 @@ public final class SeerMath {
 
     /**
      * Calculates the next expected value based on the input values using a linear regression. If the correlation is not good enough
-     * (r-square < .5) then the result is the average of the two last values.
+     * (r-square &lt; .5) then the result is the average of the two last values.
      * <p/>
      * Code is based on <a href="http://www.cs.princeton.edu/introcs/97data/LinearRegression.java.html">http://www.cs.princeton.edu/introcs/97data/LinearRegression.java.html</a>
      * <p/>
@@ -37,7 +37,7 @@ public final class SeerMath {
 
     /**
      * Calculates the next expected value based on the input values using a linear regression. If the correlation is not good enough
-     * (r-square < .5) then the result is the average of the two last values and the result's useAverage flag is set to true.
+     * (r-square &lt; .5) then the result is the average of the two last values and the result's useAverage flag is set to true.
      * <p/>
      * Code is based on <a href="http://www.cs.princeton.edu/introcs/97data/LinearRegression.java.html">http://www.cs.princeton.edu/introcs/97data/LinearRegression.java.html</a>
      * <p/>
