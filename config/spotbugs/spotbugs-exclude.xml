@@ -5,7 +5,7 @@
         <Bug code="OS,OBL"/>
     </Match>
     <Match>
-        <Class name="com.imsweb.seerutils.SeerUtils.zip.ZipArchiveThresholdInputStream"/>
+        <Class name="com.imsweb.seerutils.zip.ZipArchiveThresholdInputStream"/>
         <Bug code="DCN"/>
     </Match>
 </FindBugsFilter>
