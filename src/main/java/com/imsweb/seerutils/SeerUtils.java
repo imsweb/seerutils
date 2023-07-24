@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -397,12 +396,13 @@ public final class SeerUtils {
         if (name.endsWith(".gz") || name.endsWith(".gzip"))
             is = new GZIPInputStream(Files.newInputStream(file.toPath()));
         else if (name.endsWith(".zip")) {
-            ZipFile zipFile = new ZipFile(file);
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
-            // count the number of entries
+            ZipSecureFile zipFile = new ZipSecureFile(file);
+
             List<String> list = new ArrayList<>();
+            Enumeration<? extends ZipArchiveEntry> entries = zipFile.getEntries();
             while (entries.hasMoreElements())
                 list.add(entries.nextElement().getName());
+
             // can't be empty
             if (list.isEmpty())
                 throw new IOException("Zip file is empty.");
