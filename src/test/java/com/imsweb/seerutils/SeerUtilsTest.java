@@ -4,14 +4,13 @@
 package com.imsweb.seerutils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -174,8 +173,8 @@ public class SeerUtilsTest {
         File testFile2 = new File(tempDir, "testFile2.txt");
         String file1Txt = "This is test file 1.";
         String file2Txt = "This is test file 2.";
-        try (Writer writer1 = new OutputStreamWriter(new FileOutputStream(testFile1), StandardCharsets.US_ASCII);
-             Writer writer2 = new OutputStreamWriter(new FileOutputStream(testFile2), StandardCharsets.US_ASCII)) {
+        try (Writer writer1 = new OutputStreamWriter(Files.newOutputStream(testFile1.toPath()), StandardCharsets.US_ASCII);
+             Writer writer2 = new OutputStreamWriter(Files.newOutputStream(testFile2.toPath()), StandardCharsets.US_ASCII)) {
             writer1.write(file1Txt);
             writer2.write(file2Txt);
         }
@@ -185,7 +184,7 @@ public class SeerUtilsTest {
 
         List<String> fileTxt = new ArrayList<>();
         List<String> fileNames = new ArrayList<>();
-        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFile)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
+        try (ZipInputStream is = new ZipInputStream(Files.newInputStream(zipFile.toPath())); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
             ZipEntry entry;
             while ((entry = is.getNextEntry()) != null) {
                 fileNames.add(entry.getName());
@@ -207,8 +206,8 @@ public class SeerUtilsTest {
         File testFile4 = new File(tempTestDir, "testFile4.txt");
         String file3Txt = "This is test file 3.";
         String file4Txt = "This is test file 4.";
-        try (Writer writer3 = new OutputStreamWriter(new FileOutputStream(testFile3), StandardCharsets.US_ASCII);
-             Writer writer4 = new OutputStreamWriter(new FileOutputStream(testFile4), StandardCharsets.US_ASCII)) {
+        try (Writer writer3 = new OutputStreamWriter(Files.newOutputStream(testFile3.toPath()), StandardCharsets.US_ASCII);
+             Writer writer4 = new OutputStreamWriter(Files.newOutputStream(testFile4.toPath()), StandardCharsets.US_ASCII)) {
             writer3.write(file3Txt);
             writer4.write(file4Txt);
         }
@@ -218,7 +217,7 @@ public class SeerUtilsTest {
 
         fileTxt = new ArrayList<>();
         fileNames = new ArrayList<>();
-        try (ZipInputStream is = new ZipInputStream(new FileInputStream(zipFileDir)); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
+        try (ZipInputStream is = new ZipInputStream(Files.newInputStream(zipFileDir.toPath())); LineNumberReader reader = new LineNumberReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
             ZipEntry entry;
             while ((entry = is.getNextEntry()) != null) {
                 fileNames.add(entry.getName());

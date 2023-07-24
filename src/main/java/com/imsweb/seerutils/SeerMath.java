@@ -14,7 +14,7 @@ import java.util.List;
 public final class SeerMath {
 
     /**
-     * No instanciation for this class!
+     * No instantiation for this class!
      * <p/>
      * Created on Feb 9, 2011 by depryf
      */
@@ -112,6 +112,7 @@ public final class SeerMath {
      * Created on Aug 21, 2011 by Fabian
      * @author Fabian
      */
+    @SuppressWarnings("unused")
     public static class RegressionResult {
 
         /**

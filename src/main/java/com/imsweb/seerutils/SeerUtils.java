@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,14 +36,14 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * This class provides shared functionality that can be used by all the other modules in SEER*Utils.
  */
+@SuppressWarnings("unused")
 public final class SeerUtils {
 
     // cached pattern for the versions
-    private static final Pattern _VERSION_CLEANUP_PATTERN = Pattern.compile("^v|-(snapshot|beta)$");
     private static final Pattern _VERSIONS_PATTERN = Pattern.compile("^\\d+(\\.\\d+){0,3}$");
 
     /**
-     * Private constructor, no instanciation.
+     * Private constructor, no instantiation.
      * <p/>
      * Created on Feb 7, 2011 by Fabian
      */
@@ -63,8 +64,14 @@ public final class SeerUtils {
         if (version2 == null)
             return 1;
 
-        String v1 = _VERSION_CLEANUP_PATTERN.matcher(version1.toLowerCase()).replaceAll("");
-        String v2 = _VERSION_CLEANUP_PATTERN.matcher(version2.toLowerCase()).replaceAll("");
+        String v1 = version1.toLowerCase();
+        if (v1.startsWith("v"))
+            v1 = v1.substring(1);
+        v1 = v1.replace("-snapshot", "").replace("-beta", "");
+        String v2 = version2.toLowerCase();
+        if (v2.startsWith("v"))
+            v2 = v2.substring(1);
+        v2 = v2.replace("-snapshot", "").replace("-beta", "");
 
         if (!_VERSIONS_PATTERN.matcher(v1).matches())
             throw new IllegalArgumentException("Invalid version format: " + v1);
@@ -101,7 +108,7 @@ public final class SeerUtils {
     /**
      * Returns true if the provided string contains only printable ASCII characters, false otherwise.
      * <p/>
-     * See http://www.asciitable.com/
+     * See <a href="http://www.asciitable.com/">http://www.asciitable.com/</a>
      * <p/>
      * Considering byte values from -127 to 128, only the range 32-126 is considered printable ASCII with the following exceptions:
      * <ul>
@@ -123,7 +130,7 @@ public final class SeerUtils {
     /**
      * Returns true if the provided array of bytes contains only printable ASCII characters, false otherwise.
      * <p/>
-     * See http://www.asciitable.com/
+     * See <a href="http://www.asciitable.com/">http://www.asciitable.com/</a>
      * <p/>
      * Considering byte values from -127 to 128, only the range 32-126 is considered printable ASCII with the following exceptions:
      * <ul>
@@ -145,7 +152,7 @@ public final class SeerUtils {
     /**
      * Returns true if the provided array of bytes contains only printable pure-ASCII characters, false otherwise.
      * <p/>
-     * see <url>http://www.asciitable.com/<url>
+     * see <url><a href="http://www.asciitable.com/">http://www.asciitable.com/</a><url>
      * <p/>
      * Considering byte values from -127 to 128, only the range 32-126 is considered printable ASCII with the following exceptions:
      * <ul>
@@ -160,7 +167,7 @@ public final class SeerUtils {
      * @return boolean true if the provided array of bytes contains only printable ASCII characters, false otherwise
      */
     public static boolean isPureAscii(byte[] bytes, byte[] exceptions) {
-        if (bytes == null || bytes.length == 0)
+        if (bytes == null)
             return true;
 
         for (byte b : bytes)
@@ -172,7 +179,7 @@ public final class SeerUtils {
     }
 
     /**
-     * Copies the content of the given input stream to the the given output stream
+     * Copies the content of the given input stream to the given output stream
      * <p/>
      * Both the input stream and the output stream will be closed when this method returns.
      * <p/>
@@ -193,7 +200,7 @@ public final class SeerUtils {
      * Created on May 27, 2004 by Fabian Depry
      * @param input where to take the data from
      * @param output where to send the data to
-     * @param closeOutput whether or not the output stream should be closed
+     * @param closeOutput whether the output stream should be closed
      * @throws IOException if data cannot be copied from input to output
      */
     public static void copyInputStreamToOutputStream(InputStream input, OutputStream output, boolean closeOutput) throws IOException {
@@ -215,7 +222,7 @@ public final class SeerUtils {
     }
 
     /**
-     * Copies the content of the given reader to the the given writer.
+     * Copies the content of the given reader to the given writer.
      * <p/>
      * Both readers will be closed when this method returns.
      * <p/>
@@ -229,14 +236,14 @@ public final class SeerUtils {
     }
 
     /**
-     * Copies the content of the given reader to the the given writer making no assumption on the encoding.
+     * Copies the content of the given reader to the given writer making no assumption on the encoding.
      * <p/>
      * The input reader will be closed when this method returns; the output writer will be closed only if closeOutput is set to true
      * <p/>
      * Created on May 27, 2004 by Fabian Depry
      * @param input where to take the data from
      * @param output where to send the data to
-     * @param closeOutput whether or not the output writer should be closed
+     * @param closeOutput whether the output writer should be closed
      * @throws IOException if data cannot be copied from input to output
      */
     public static void copyReaderToWriter(Reader input, Writer output, boolean closeOutput) throws IOException {
@@ -387,7 +394,7 @@ public final class SeerUtils {
 
         InputStream is;
         if (name.endsWith(".gz") || name.endsWith(".gzip"))
-            is = new GZIPInputStream(new FileInputStream(file));
+            is = new GZIPInputStream(Files.newInputStream(file.toPath()));
         else if (name.endsWith(".zip")) {
             ZipFile zipFile = new ZipFile(file);
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -417,7 +424,7 @@ public final class SeerUtils {
                 is = tmp;
         }
         else
-            is = new FileInputStream(file);
+            is = Files.newInputStream(file.toPath());
 
         return is;
     }
@@ -440,11 +447,11 @@ public final class SeerUtils {
         String name = file.getName().toLowerCase();
 
         if (name.endsWith(".gz") || name.endsWith(".gzip"))
-            os = new GZIPOutputStream(new FileOutputStream(file));
+            os = new GZIPOutputStream(Files.newOutputStream(file.toPath()));
         else if (name.endsWith(".zip"))
-            os = new ZipOutputStream(new FileOutputStream(file));
+            os = new ZipOutputStream(Files.newOutputStream(file.toPath()));
         else
-            os = new FileOutputStream(file);
+            os = Files.newOutputStream(file.toPath());
 
         return os;
     }
@@ -615,8 +622,11 @@ public final class SeerUtils {
             throw new IOException("Unable to read from source directory");
 
         for (File f : files) {
-            if (f.isFile())
-                copyInputStreamToOutputStream(new FileInputStream(f), new FileOutputStream(new File(to, f.getName())));
+            if (f.isFile()) {
+                try (InputStream is = Files.newInputStream(f.toPath())) {
+                    copyInputStreamToOutputStream(is, Files.newOutputStream(new File(to, f.getName()).toPath()));
+                }
+            }
             else
                 copyDirectory(f, new File(to, f.getName()));
         }
@@ -649,17 +659,14 @@ public final class SeerUtils {
             throw new IOException("Unable to read from source directory");
 
         for (File f : files) {
-            if (f.isFile()) {
-                if (!f.delete())
-                    throw new IOException("Unable to delete '" + f.getPath() + "'");
-            }
+            if (f.isFile())
+                Files.delete(f.toPath());
             else
                 deleteDirectory(f, true);
         }
 
         if (deleteRoot)
-            if (!dir.delete())
-                throw new IOException("Unable to delete '" + dir.getPath() + "'");
+            Files.delete(dir.toPath());
     }
 
     /**
@@ -695,7 +702,7 @@ public final class SeerUtils {
             relative += "/";
         zipOutput.putNextEntry(new ZipEntry(relative));
         if (file.isFile())
-            copyInputStreamToOutputStream(new FileInputStream(file), zipOutput, false);
+            copyInputStreamToOutputStream(Files.newInputStream(file.toPath()), zipOutput, false);
         else {
             File[] files = file.listFiles();
             if (files != null)
@@ -733,9 +740,9 @@ public final class SeerUtils {
                         throw new IOException("Unable to create '" + target.getPath() + "'");
                 }
                 else {
-                    FileOutputStream fos = new FileOutputStream(target);
-                    copyInputStreamToOutputStream(file.getInputStream(entry), fos);
-                    fos.close();
+                    try (FileOutputStream fos = new FileOutputStream(target)) {
+                        copyInputStreamToOutputStream(file.getInputStream(entry), fos);
+                    }
                 }
 
                 entry = zipInput.getNextEntry();
