@@ -11,6 +11,7 @@ import java.util.Map;
  * @param <A>
  * @param <B>
  */
+@SuppressWarnings({"java:S2160", "unused"}) // override equals, class not used
 public class SeerLRUCache<A, B> extends LinkedHashMap<A, B> {
 
     private static final long serialVersionUID = 4701170688038236784L;

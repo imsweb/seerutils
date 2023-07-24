@@ -4,7 +4,6 @@
 package com.imsweb.seerutils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,12 +25,14 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.imsweb.seerutils.zip.ZipSecureFile;
 
 /**
  * This class provides shared functionality that can be used by all the other modules in SEER*Utils.
@@ -727,9 +728,11 @@ public final class SeerUtils {
         if (!to.isDirectory())
             throw new IOException("Target is not a directory.");
 
-        try (ZipFile file = new ZipFile(from); FileInputStream fis = new FileInputStream(from); ZipInputStream zipInput = new ZipInputStream(fis)) {
-            ZipEntry entry = zipInput.getNextEntry();
-            while (entry != null) {
+        try (ZipSecureFile file = new ZipSecureFile(from)) {
+            Enumeration<? extends ZipArchiveEntry> entries = file.getEntries();
+            while (entries.hasMoreElements()) {
+                ZipArchiveEntry entry = entries.nextElement();
+
                 File target = new File(to, entry.getName());
                 if (!target.getParentFile().exists())
                     if (!target.getParentFile().mkdirs())
@@ -744,8 +747,6 @@ public final class SeerUtils {
                         copyInputStreamToOutputStream(file.getInputStream(entry), fos);
                     }
                 }
-
-                entry = zipInput.getNextEntry();
             }
         }
     }

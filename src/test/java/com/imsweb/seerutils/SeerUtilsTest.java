@@ -260,8 +260,27 @@ public class SeerUtilsTest {
         Assert.assertEquals("TEST3", SeerUtils.readFile(new File(newSubDir2, "test3.txt")));
     }
 
+    @Test
+    public void testUnzipFile() throws IOException {
+        File dir = new File(getTestingDirectory(), "test-zip");
+        if (dir.exists())
+            FileUtils.deleteDirectory(dir);
+        Assert.assertFalse(dir.exists());
+        Assert.assertTrue(dir.mkdir());
+        File sourceFile = new File(dir, "test-zip.txt");
+        SeerUtils.writeFile("TEST", sourceFile);
+        File targetFile = new File(dir, "test-zip.zip");
+        SeerUtils.zipFile(sourceFile, targetFile);
+        Assert.assertTrue(targetFile.exists());
+
+        sourceFile = targetFile;
+        File targetDir = new File(dir, "test-zip-2");
+        SeerUtils.unzipFile(sourceFile, targetDir);
+        Assert.assertTrue(targetDir.exists());
+    }
+
     private File getTestingDirectory() {
-        File workingDir = new File(System.getProperty("user.dir").replace(".idea\\modules\\", ""));
+        File workingDir = new File(System.getProperty("user.dir"));
         if (!workingDir.exists())
             throw new RuntimeException("Unable to find " + workingDir.getPath());
         File file = new File(workingDir, "build/test-data");
