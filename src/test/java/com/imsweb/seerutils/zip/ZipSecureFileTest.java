@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import com.imsweb.seerutils.SeerUtils;
 
+import static java.nio.charset.StandardCharsets.US_ASCII;
+
 public class ZipSecureFileTest {
 
     @Test
@@ -39,7 +41,7 @@ public class ZipSecureFileTest {
 
             Enumeration<ZipArchiveEntry> entries = secureFile.getEntries();
             while (entries.hasMoreElements()) {
-                try (InputStreamReader reader = new InputStreamReader(secureFile.getInputStream(entries.nextElement())); StringWriter writer = new StringWriter()) {
+                try (InputStreamReader reader = new InputStreamReader(secureFile.getInputStream(entries.nextElement()), US_ASCII); StringWriter writer = new StringWriter()) {
                     SeerUtils.copyReaderToWriter(reader, writer);
                     Assert.assertTrue(writer.toString().startsWith("test"));
                 }
