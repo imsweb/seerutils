@@ -82,7 +82,6 @@ sonarqube {
         property 'sonar.projectKey', 'imsweb_seerutils'
         property 'sonar.organization', 'imsweb'
         property 'sonar.host.url', 'https://sonarcloud.io'
-        //property 'sonar.gradle.skipCompile', 'true' // this is supposed to remove the warning about the compilation timing, but it doesn't :-(
     }
 }
 
