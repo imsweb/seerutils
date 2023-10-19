@@ -31,11 +31,6 @@ public class ZipArchiveThresholdInputStream extends FilterInputStream {
 
     public ZipArchiveThresholdInputStream(InputStream is) {
         super(is);
-
-        if (!(is instanceof InputStreamStatistics))
-            throw new IllegalArgumentException("InputStream of class " + is.getClass() + " is not implementing InputStreamStatistics.");
-
-        // set defaults but they will always be set by ZipSecureFile.getInputStream
         _minInflateRatio = 0.01d;
         _maxEntrySize = 0xFFFFFFFFL;
     }
@@ -92,6 +87,9 @@ public class ZipArchiveThresholdInputStream extends FilterInputStream {
     private void checkThreshold() throws IOException {
         if (!_guardState)
             return;
+
+        if (!(in instanceof InputStreamStatistics))
+            throw new IllegalArgumentException("InputStream of class " + in.getClass() + " is not implementing InputStreamStatistics.");
 
         final InputStreamStatistics stats = (InputStreamStatistics)in;
         final long payloadSize = stats.getUncompressedCount();

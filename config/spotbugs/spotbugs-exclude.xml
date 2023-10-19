@@ -8,4 +8,8 @@
         <Class name="com.imsweb.seerutils.zip.ZipArchiveThresholdInputStream"/>
         <Bug code="DCN"/>
     </Match>
+    <Match>
+        <Class name="com.imsweb.seerutils.zip.ZipSecureFile"/>
+        <Bug code="CT"/>
+    </Match>
 </FindBugsFilter>
