@@ -1,15 +1,11 @@
 ## SEER*Utils Version History
 
-**Changes in version 5.8**
-
-- Change unzip method to be safe about zip-bombs
-- Updated commons-lang3 to version 3.12.0
-- Updated commons-io to version 2.13.0
-- Added commons-compress version 1.22
-
 **Changes in version 5.7**
 
-- Updated commons-lang3 to version 3.9
+- Change unzip method to be safe about zip-bombs
+- Updated commons-lang3 to version 3.17.0
+- Updated commons-io to version 2.19.0
+- Updated commons-compress to version 1.27.1
 
 **Changes in version 5.6**
 
