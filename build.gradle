@@ -7,6 +7,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.52.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
     id 'com.github.spotbugs' version '6.1.11' // spotbugs code analysis
     id 'org.sonatype.gradle.plugins.scan' version '3.1.1' // scan for vulnerabilities
+    id 'org.sonarqube' version '6.1.0.5360' // sonarQube analysis
 }
 
 group = 'com.imsweb'
@@ -69,6 +70,14 @@ jacocoTestReport {
     }
 }
 test.finalizedBy jacocoTestReport
+
+sonarqube {
+    properties {
+        property 'sonar.projectKey', 'imsweb_seerutils'
+        property 'sonar.organization', 'imsweb'
+        property 'sonar.host.url', 'https://sonarcloud.io'
+    }
+}
 
 // Nexus vulnerability scan (see https://github.com/sonatype-nexus-community/scan-gradle-plugin)
 ossIndexAudit {
