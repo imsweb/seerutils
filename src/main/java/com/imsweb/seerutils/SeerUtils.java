@@ -210,12 +210,11 @@ public final class SeerUtils {
             throw new IOException("Output Stream is null");
 
         // delegate the work to the IOUtils class...
-        try {
+        try (input) {
             IOUtils.copyLarge(input, output);
             output.flush();
         }
         finally {
-            input.close();
             if (closeOutput)
                 output.close();
         }

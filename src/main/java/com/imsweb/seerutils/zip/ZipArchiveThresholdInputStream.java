@@ -126,7 +126,7 @@ public class ZipArchiveThresholdInputStream extends FilterInputStream {
             throw new IllegalStateException("getNextEntry() is only allowed for stream based zip processing.");
 
         try {
-            _entry = ((ZipArchiveInputStream)in).getNextZipEntry();
+            _entry = ((ZipArchiveInputStream)in).getNextEntry();
             return _entry;
         }
         catch (ZipException ze) {

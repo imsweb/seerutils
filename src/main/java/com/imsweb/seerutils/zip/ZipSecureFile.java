@@ -18,7 +18,12 @@ import org.apache.commons.io.IOUtils;
  * while reading the archive.
  */
 @SuppressWarnings("unused")
-public class ZipSecureFile extends ZipFile {
+public class ZipSecureFile implements AutoCloseable {
+
+    /**
+     * Wrapped ZIP file.
+     */
+    private final ZipFile _zipFile;
 
     /**
      * The ratio between de- and inflated bytes to detect zip-bomb. It defaults to 0.75% (= 0.0075d), i.e. when the compression is better than
@@ -36,8 +41,7 @@ public class ZipSecureFile extends ZipFile {
     }
 
     public ZipSecureFile(File file, double minInflationRatio, long maxEntrySize) throws IOException {
-        super(file);
-
+        _zipFile = ZipFile.builder().setFile(file).get();
         _minInflateRatio = minInflationRatio;
         _maxEntrySize = maxEntrySize;
     }
@@ -58,6 +62,19 @@ public class ZipSecureFile extends ZipFile {
         return _maxEntrySize;
     }
 
+    public ZipArchiveEntry getEntry(String name) {
+        return _zipFile.getEntry(name);
+    }
+
+    public Enumeration<ZipArchiveEntry> getEntries() {
+        return _zipFile.getEntries();
+    }
+
+    @Override
+    public void close() throws IOException {
+        _zipFile.close();
+    }
+
     /**
      * Returns an input stream for reading the contents of the specified zip file entry.
      * <p>
@@ -67,9 +84,8 @@ public class ZipSecureFile extends ZipFile {
      * @throws IOException if an I/O error has occurred
      * @throws IllegalStateException if the zip file has been closed
      */
-    @Override
     public InputStream getInputStream(ZipArchiveEntry entry) throws IOException {
-        ZipArchiveThresholdInputStream is = new ZipArchiveThresholdInputStream(super.getInputStream(entry));
+        ZipArchiveThresholdInputStream is = new ZipArchiveThresholdInputStream(_zipFile.getInputStream(entry));
 
         is.setEntry(entry);
         is.setMinInflateRatio(_minInflateRatio);
