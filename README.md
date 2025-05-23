@@ -2,7 +2,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=imsweb_seerutils&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=imsweb_seerutils)
 [![integration](https://github.com/imsweb/seerutils/workflows/integration/badge.svg)](https://github.com/imsweb/seerutils/actions)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/seerutils/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/seerutils)
+[![Maven Central](https://img.shields.io/maven-central/v/com.imsweb/seerutils.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.imsweb/seerutils)
 
 This project contains a few utility classes for SEER Java projects.
 
