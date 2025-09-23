@@ -3,11 +3,10 @@ import com.vanniktech.maven.publish.*
 plugins {
     id 'java-library'
     id 'jacoco'
-    id 'com.vanniktech.maven.publish' version '0.32.0' // publish to Maven Central
+    id 'com.vanniktech.maven.publish' version '0.34.0' // publish to Maven Central
     id 'com.github.ben-manes.versions' version '0.52.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
-    id 'com.github.spotbugs' version '6.1.11' // spotbugs code analysis
-    id 'org.sonatype.gradle.plugins.scan' version '3.1.1' // scan for vulnerabilities
-    id 'org.sonarqube' version '6.1.0.5360' // sonarQube analysis
+    id 'com.github.spotbugs' version '6.4.2' // spotbugs code analysis
+    id 'org.sonarqube' version '6.3.1.5724' // sonarQube analysis
 }
 
 group = 'com.imsweb'
@@ -21,9 +20,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.commons:commons-lang3:3.17.0'
-    implementation 'org.apache.commons:commons-compress:1.27.1'
-    implementation 'commons-io:commons-io:2.19.0'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'org.apache.commons:commons-compress:1.28.0'
+    implementation 'commons-io:commons-io:2.20.0'
 
     testImplementation 'junit:junit:4.13.2'
 }
@@ -79,13 +78,6 @@ sonarqube {
     }
 }
 
-// Nexus vulnerability scan (see https://github.com/sonatype-nexus-community/scan-gradle-plugin)
-ossIndexAudit {
-    outputFormat = 'DEPENDENCY_GRAPH'
-    printBanner = false
-}
-check.dependsOn 'ossIndexAudit'
-
 def isNonStable = { String version ->
     def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
     def regex = /^[0-9,.v-]+(-r)?$/
@@ -103,7 +95,7 @@ tasks.named("dependencyUpdates").configure {
 mavenPublishing {
     configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
 
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
+    publishToMavenCentral(true)
     signAllPublications()
 
     pom {
