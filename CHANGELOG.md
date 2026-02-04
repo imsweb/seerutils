@@ -1,5 +1,10 @@
 ## SEER*Utils Version History
 
+**Changes in version 5.8 (not released yet)**
+
+- Changed the minimum Java language for this library from Java 11 to Java 21.
+- Updated dependencies.
+
 **Changes in version 5.7**
 
 - Change unzip method to be safe about zip-bombs
